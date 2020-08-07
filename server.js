@@ -1,17 +1,20 @@
 const express = require('express')
 const socket = require('socket.io')
+const path = require('path')
 const http = require('http')
-const { isObject } = require('util')
 const app = express()
 const server = http.createServer(app)
 const PORT = process.env.PORT || 3000
+const io = socket(server)
+app.use(express.json())
+app.use(express.static('./public'))
 
-socket.on('connection', ()=>{
-    socket.broadcast.emit('message', 'A New Client Joined')
+io.on('connection', (socket)=>{
     socket.emit('message', 'You joined')
+    socket.broadcast.emit('message', 'A new user joined')
+
+    
 })
-
-
 server.listen(PORT, ()=>{
     console.log('PORT IS OPEN ON ' + PORT)
 })
