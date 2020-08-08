@@ -10,10 +10,14 @@ app.use(express.json())
 app.use(express.static('./public'))
 
 io.on('connection', (socket)=>{
+    // Joining message
     socket.emit('message', 'You joined')
     socket.broadcast.emit('message', 'A new user joined')
 
-    
+    // Leaving message
+    io.on('disconnect', ()=>{
+        socket.emit('message', 'An user left')
+    })
 })
 server.listen(PORT, ()=>{
     console.log('PORT IS OPEN ON ' + PORT)
